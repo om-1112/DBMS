@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Orders</title>
+</head>
+<body>
+<h2>My Orders</h2>
+<table border="1">
+<tr><th>Order ID</th><th>Product</th><th>Qty</th><th>Total</th><th>Date</th></tr>
+{% for o in orders %}
+<tr>
+<td>{{ o.OrderID }}</td>
+<td>{{ o.Product }}</td>
+<td>{{ o.Quantity }}</td>
+<td>₹{{ o.TotalAmount }}</td>
+<td>{{ o.OrderDate }}</td>
+</tr>
+{% endfor %}
+</table>
+<p><a href="/">Back to Home</a></p>
+</body>
+</html>

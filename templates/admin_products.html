@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><title>Manage Products</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h2>All Products</h2>
+<a href="/admin/add">Add New Product</a>
+<table border="1">
+<tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr>
+{% for p in products %}
+<tr>
+    <td>{{ p.ProductID }}</td>
+    <td>{{ p.Name }}</td>
+    <td>{{ p.Price }}</td>
+    <td>{{ p.Stock }}</td>
+    <td><a href="/admin/delete/{{ p.ProductID }}">Delete</a></td>
+</tr>
+{% endfor %}
+</table>
+<p><a href="/admin/dashboard">Back</a></p>
+</body>
+</html>

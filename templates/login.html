@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login | E-Commerce System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>Customer Login</header>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/register">Register</a>
+</nav>
+
+<div class="container">
+    <h2>Login</h2>
+
+    <form action="/login" method="POST">
+        <input type="email" name="email" placeholder="Email Address" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Login">
+    </form>
+
+    <p style="text-align:center;">Don’t have an account? <a href="/register">Register now</a></p>
+</div>
+
+<footer>© 2025 E-Commerce System</footer>
+</body>
+</html>

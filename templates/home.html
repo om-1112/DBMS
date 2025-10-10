@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+<h2>Welcome, {{ name }} 👋</h2>
+<p><a href="/products">View Products</a></p>
+<p><a href="/myorders">My Orders</a></p>
+<a href="/logout">Logout</a>
+</body>
+</html>
