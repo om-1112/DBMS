@@ -1,22 +1,55 @@
 <!DOCTYPE html>
 <html>
-<head><title>Manage Products</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<head>
+    <title>Manage Products</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<h2>All Products</h2>
-<a href="/admin/add">Add New Product</a>
-<table border="1">
-<tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr>
-{% for p in products %}
-<tr>
-    <td>{{ p.ProductID }}</td>
-    <td>{{ p.Name }}</td>
-    <td>{{ p.Price }}</td>
-    <td>{{ p.Stock }}</td>
-    <td><a href="/admin/delete/{{ p.ProductID }}">Delete</a></td>
-</tr>
-{% endfor %}
-</table>
-<p><a href="/admin/dashboard">Back</a></p>
+    <header>
+        <h1>Manage Products</h1>
+    </header>
+    <nav>
+        <a href="/admin/dashboard">Back to Dashboard</a>
+        <a href="/admin/add">Add New Product</a>
+    </nav>
+    <div class="container">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            {% for p in products %}
+            <tr>
+                <td>{{ p.ProductID }}</td>
+                <td>{{ p.Name }}</td>
+                <td>₹{{ "%.2f"|format(p.Price) }}</td>
+                <td>{{ p.Stock }}</td>
+                <td>
+                    {% if p.is_active %}
+                        <span style="color: green; font-weight: bold;">Active</span>
+                    {% else %}
+                        <span style="color: red; font-weight: bold;">Inactive</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/admin/edit/{{ p.ProductID }}" class="btn-action" style="background-color: #ffc107; margin-right: 5px;">Edit</a>
+                    
+                    {% if p.is_active %}
+                        <a href="/admin/delete/{{ p.ProductID }}" class="btn-danger">Deactivate</a>
+                    {% else %}
+                        <a href="/admin/activate/{{ p.ProductID }}" class="btn-action">Make Active</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <footer>
+        <p>© 2025 E-Commerce System</p>
+    </footer>
 </body>
 </html>

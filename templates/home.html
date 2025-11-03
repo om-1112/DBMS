@@ -3,12 +3,60 @@
 <head>
     <title>Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
 </head>
 <body>
-<h2>Welcome, {{ name }} 👋</h2>
-<p><a href="/products">View Products</a></p>
-<p><a href="/myorders">My Orders</a></p>
-<a href="/logout">Logout</a>
+    <header>
+        <h1>E-Commerce Home</h1>
+    </header>
+    <nav>
+        <a href="/products">View All Products</a>
+        <a href="/myorders">My Orders</a>
+        <a href="/cart">My Cart</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h2>Welcome back, {{ name }}! 👋</h2>
+            <p>Check out our latest arrivals and find what you need.</p>
+            <a href="/products" class="btn-action">Shop All Products</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="featured-title">Featured Products</h2>
+        
+        <div class="product-grid" id="productGrid">
+            {% for p in products %}
+            <div class="product-card">
+                <img src="{{ p.image_url or 'https://placehold.co/400x300?text=No+Image' }}" alt="{{ p.Name }}" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">{{ p.Name }}</h3>
+                    <p class="product-price">₹{{ "%.2f"|format(p.Price) }}</p>
+                    {% if p.Stock > 0 %}
+                        <p class="product-stock">In Stock: {{ p.Stock }}</p>
+                    {% else %}
+                        <p class="out-of-stock">Out of Stock</p>
+                    {% endif %}
+                    <div class="product-action">
+                        {% if p.Stock > 0 %}
+                        <form action="/add" method="POST" style="box-shadow: none; padding: 0; border: none;">
+                            <input type="hidden" name="product_id" value="{{ p.ProductID }}">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" name="quantity" value="1" min="1" max="{{ p.Stock }}" style="width: 70px; padding: 10px;">
+                                <button type="submit" class="btn-action" style="flex-grow: 1; padding: 11px;">Add to Cart</button>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 E-Commerce System</p>
+    </footer>
 </body>
 </html>

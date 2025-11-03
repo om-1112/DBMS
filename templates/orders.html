@@ -2,21 +2,37 @@
 <html>
 <head>
     <title>My Orders</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<h2>My Orders</h2>
-<table border="1">
-<tr><th>Order ID</th><th>Product</th><th>Qty</th><th>Total</th><th>Date</th></tr>
-{% for o in orders %}
-<tr>
-<td>{{ o.OrderID }}</td>
-<td>{{ o.Product }}</td>
-<td>{{ o.Quantity }}</td>
-<td>₹{{ o.TotalAmount }}</td>
-<td>{{ o.OrderDate }}</td>
-</tr>
-{% endfor %}
-</table>
-<p><a href="/">Back to Home</a></p>
+    <header>
+        <h1>My Orders</h1>
+    </header>
+    <nav>
+        <a href="/">Back to Home</a>
+    </nav>
+    <div class="container">
+        <table>
+            <tr>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Date</th>
+                <th>Status</th> </tr>
+            {% for o in orders %}
+            <tr>
+                <td>{{ o.OrderID }}</td>
+                <td>{{ o.product.Name }}</td> <td>{{ o.Quantity }}</td>
+                <td>₹{{ "%.2f"|format(o.TotalAmount) }}</td>
+                <td>{{ o.OrderDate.strftime('%Y-%m-%d') }}</td>
+                <td style="font-weight: bold;">{{ o.status }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <footer>
+        <p>© 2025 E-Commerce System</p>
+    </footer>
 </body>
 </html>

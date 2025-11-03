@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Shopping Cart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>My Shopping Cart</h1>
+    </header>
+    <nav>
+        <a href="/">Back to Home</a>
+        <a href="/products">Continue Shopping</a>
+    </nav>
+    <div class="container">
+        {% if 'cart' in session and session['cart'] %}
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+            {% for item in session['cart'].values() %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>₹{{ "%.2f"|format(item.price) }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>₹{{ "%.2f"|format(item.price * item.quantity) }}</td>
+                <td><a href="/remove/{{ item.id }}" class="btn-danger">Remove</a></td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" style="text-align: right; font-weight: bold;">Total:</td>
+                <td colspan="2" style="font-weight: bold;">₹{{ "%.2f"|format(total) }}</td>
+            </tr>
+        </table>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/checkout" class="btn-action">Proceed to Checkout</a>
+        </div>
+        {% else %}
+        <h2>Your cart is empty.</h2>
+        <p><a href="/products">Go shopping!</a></p>
+        {% endif %}
+    </div>
+    <footer>
+        <p>© 2025 E-Commerce System</p>
+    </footer>
+</body>
+</html>

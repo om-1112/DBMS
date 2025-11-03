@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html>
-<head><title>Admin Dashboard</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<h2>Welcome, Admin {{ session['admin'] }}</h2>
-<p><a href="/admin/products">Manage Products</a></p>
-<p><a href="/admin/logout">Logout</a></p>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+    <nav>
+        <a href="/admin/products">Manage Products</a>
+        <a href="/admin/orders">Manage Orders</a> <a href="/admin/logout">Logout</a>
+    </nav>
+    <div class="container">
+        <h2>Welcome, Admin {{ session['admin'] }}</h2>
+        <p>Select an option from the navigation menu to get started.</p>
+    </div>
+    <footer>
+        <p>© 2025 E-Commerce System</p>
+    </footer>
 </body>
 </html>

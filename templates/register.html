@@ -1,30 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register | E-Commerce System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-<header>Create Your Account</header>
+{% extends "base.html" %}
 
-<nav>
-    <a href="/">Home</a>
-    <a href="/login">Login</a>
-</nav>
+{% block title %}Register{% endblock %}
+{% block header %}Create Your Account{% endblock %}
+{% block nav %}{% endblock %}
 
-<div class="container">
+{% block content %}
+<form action="/register" method="POST">
     <h2>Register</h2>
-
-    <form action="/register" method="POST">
-        <input type="text" name="name" placeholder="Full Name" required>
-        <input type="email" name="email" placeholder="Email Address" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="submit" value="Register">
-    </form>
-
+    <input type="text" name="name" placeholder="Full Name" required>
+    <input type="email" name="email" placeholder="Email Address" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <input type="submit" value="Register">
     <p style="text-align:center;">Already have an account? <a href="/login">Login here</a></p>
-</div>
-
-<footer>© 2025 E-Commerce System</footer>
-</body>
-</html>
+</form>
+{% endblock %}

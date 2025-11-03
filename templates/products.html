@@ -1,31 +1,148 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Products</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <title>Products</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<h2>Available Products</h2>
-<table border="1">
-<tr>
-    <th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th>
-</tr>
-{% for p in products %}
-<tr>
-    <td>{{ p.ProductID }}</td>
-    <td>{{ p.Name }}</td>
-    <td>{{ p.Price }}</td>
-    <td>{{ p.Stock }}</td>
-    <td>
-        {% if p.Stock > 0 %}
-        <a href="/order/{{ p.ProductID }}">Order</a>
-        {% else %}
-        Out of Stock
-        {% endif %}
-    </td>
-</tr>
-{% endfor %}
-</table>
-<p><a href="/">Back to Home</a></p>
+    <header>
+        <h1>Available Products</h1>
+    </header>
+    <nav>
+        <a href="/">Back to Home</a>
+        <a href="/cart">My Cart</a>
+    </nav>
+
+    <div class="container" style="padding-bottom: 0;">
+        <form style="flex-direction: row; align-items: center; gap: 10px; box-shadow: none; border: none; padding: 0;">
+            <input type="text" id="searchInput" placeholder="Search for products..." style="flex-grow: 1;">
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="product-grid" id="productGrid">
+            {% for p in products %}
+            <div class="product-card" 
+                 data-name="{{ p.Name }}"
+                 data-price="₹{{ '%.2f'|format(p.Price) }}"
+                 data-image="{{ p.image_url or 'https://placehold.co/400x300?text=No+Image' }}"
+                 data-description="{{ p.description or 'No description available for this product.' }}"
+                 style="cursor: pointer;">
+
+                <img src="{{ p.image_url or 'https://placehold.co/400x300?text=No+Image' }}" alt="{{ p.Name }}" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">{{ p.Name }}</h3>
+                    <p class="product-price">₹{{ "%.2f"|format(p.Price) }}</p>
+                    {% if p.Stock > 0 %}
+                        <p class="product-stock">In Stock: {{ p.Stock }}</p>
+                    {% else %}
+                        <p class="out-of-stock">Out of Stock</p>
+                    {% endif %}
+                    <div class="product-action">
+                        {% if p.Stock > 0 %}
+                        <form action="/add" method="POST" style="box-shadow: none; padding: 0; border: none;">
+                            <input type="hidden" name="product_id" value="{{ p.ProductID }}">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" name="quantity" value="1" min="1" max="{{ p.Stock }}" style="width: 70px; padding: 10px;">
+                                <button type="submit" class="btn-action" style="flex-grow: 1; padding: 11px;">Add to Cart</button>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="productModalOverlay"></div>
+    <div class="modal-content" id="productModal">
+        <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
+        <img src="" alt="Product Image" class="modal-image" id="modalImage">
+        <div class="modal-info">
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <p class="modal-price" id="modalPrice"></p>
+            <p class="modal-description" id="modalDesc"></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 E-Commerce System</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Modal elements
+            const modal = document.getElementById('productModal');
+            const overlay = document.getElementById('productModalOverlay');
+            const closeBtn = document.getElementById('modalCloseBtn');
+
+            // Modal content elements
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalPrice = document.getElementById('modalPrice');
+            const modalDesc = document.getElementById('modalDesc');
+            
+            // All product cards
+            const productCards = document.querySelectorAll('.product-card');
+
+            // Function to open the modal
+            function openModal(card) {
+                // Get data from the card's data attributes
+                const name = card.dataset.name;
+                const price = card.dataset.price;
+                const imageSrc = card.dataset.image;
+                const description = card.dataset.description;
+
+                // Populate the modal
+                modalImage.src = imageSrc;
+                modalTitle.textContent = name;
+                modalPrice.textContent = price;
+                modalDesc.textContent = description;
+
+                // Show the modal
+                modal.classList.add('active');
+                overlay.classList.add('active');
+            }
+
+            // Function to close the modal
+            function closeModal() {
+                modal.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+
+            // Add click listener to each product card
+            productCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // IMPORTANT: Only open modal if the click is NOT on the form
+                    if (!e.target.closest('.product-action')) {
+                        openModal(this);
+                    }
+                });
+            });
+
+            // Add click listeners to close the modal
+            closeBtn.addEventListener('click', closeModal);
+            overlay.addEventListener('click', closeModal);
+
+            // --- Real-Time Search Script (no changes needed) ---
+            const searchInput = document.getElementById('searchInput');
+            const productGrid = document.getElementById('productGrid');
+            const allCards = productGrid.getElementsByClassName('product-card');
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                for (let i = 0; i < allCards.length; i++) {
+                    const card = allCards[i];
+                    const productName = card.querySelector('.product-name').textContent.toLowerCase();
+                    if (productName.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
